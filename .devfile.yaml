@@ -1,0 +1,28 @@
+schemaVersion: 2.1.0
+metadata:
+  name: my-workspace
+components:
+  - name: java-17
+    container:
+      image: registry.access.redhat.com/ubi8/openjdk-17:latest
+      args: ['tail', '-f', '/dev/null']
+      memoryLimit: 512Mi
+      mountSources: true
+      volumeMounts:
+        - name: m2
+          path: /home/user/.m2
+      endpoints:
+        - name: http-quarkus
+          targetPort: 8080
+        - exposure: none
+          name: debug
+          targetPort: 5858
+      env:
+        - name: DEBUG_PORT
+          value: '5858'
+  - name: m2
+    volume:
+      size: 3Gi
+  - name: projects
+    volume:
+      size: 4Gi
